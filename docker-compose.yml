@@ -1,0 +1,26 @@
+services:
+  youtrack:
+    image: jetbrains/youtrack:2025.1.74704
+    container_name: youtrack
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - YOUTRACK_JAVA_OPTS=-Xmx2g -Xms1g
+    volumes:
+      - youtrack_data:/opt/youtrack/data
+      - youtrack_logs:/opt/youtrack/logs
+      - youtrack_backups:/opt/youtrack/backups
+      - youtrack_conf:/opt/youtrack/conf
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/youtrack"]
+      interval: 1m
+      timeout: 10s
+      retries: 5
+
+volumes:
+  youtrack_data:
+  youtrack_logs:
+  youtrack_backups:
+  youtrack_conf:
