@@ -6,7 +6,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - YOUTRACK_JAVA_OPTS=-Xmx2g -Xms1g
+      - YOUTRACK_JAVA_OPTS=-Xmx2g -Xms1g -XX:+UseG1GC
     volumes:
       - youtrack_data:/opt/youtrack/data
       - youtrack_logs:/opt/youtrack/logs
@@ -14,10 +14,11 @@ services:
       - youtrack_conf:/opt/youtrack/conf
 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/youtrack"]
-      interval: 1m
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/"]
+      interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 1m
 
 volumes:
   youtrack_data:
